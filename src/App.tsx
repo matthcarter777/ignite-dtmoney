@@ -4,7 +4,8 @@ import Modal from "react-modal";
 import { Dashboard } from "./components/Dashboard";
 import { Header } from "./components/Header";
 import { GlobalStyle } from "./styles/global";
-import { NewTransactionModal } from './components/NewTransactionModal'
+import { NewTransactionModal } from './components/NewTransactionModal';
+import { TransactionsContextProvider } from './hooks/useTransactions';
 
 Modal.setAppElement('#root');
 
@@ -21,15 +22,17 @@ export function App() {
 
   return (
     <>
-      <Header onOpenNewTransactionModal={handleOpenNewTransactionModa} />
-      <Dashboard />
+      <TransactionsContextProvider>
+        <Header onOpenNewTransactionModal={handleOpenNewTransactionModa} />
+        <Dashboard />
 
-      <NewTransactionModal 
-        isOpen={isNewTransaticonModalOpen}
-        onRequestClose={handleCloseNewTransactionModal} 
-      />
+        <NewTransactionModal 
+          isOpen={isNewTransaticonModalOpen}
+          onRequestClose={handleCloseNewTransactionModal} 
+        />
 
-      <GlobalStyle />
+        <GlobalStyle />
+      </TransactionsContextProvider>
     </>
   );
 }
