@@ -11,19 +11,34 @@ interface Transaction {
   createdAt: string;
 }
 
-interface TransactionsContextData {
-  transactions: Transaction[];
+interface TransactionData {
+  type: string;
+  title: string;
+  amount: number;
+  category: string;
 }
 
-interface TransactionsContextProps {
+interface TransactionsContextData {
+  transactions: Transaction[];
+  createTransaction: (data: TransactionData) => void;
+}
+
+interface TransactionsContextProviderProps {
   children: ReactNode;
 }
 
 export const TransactionsContext = createContext<TransactionsContextData>({} as TransactionsContextData);
 
-export function TransactionsContextProvider({children}: TransactionsContextProps) {
+export function TransactionsContextProvider({children}: TransactionsContextProviderProps) {
 
   const [transactions, setTransactions] = useState<Transaction[]>([])
+
+  async function createTransaction(data: TransactionData) {
+
+    api.post('/transactions', data);
+
+    return;
+  }
 
   useEffect(() => {
     (async () => {
@@ -36,7 +51,8 @@ export function TransactionsContextProvider({children}: TransactionsContextProps
   return (
     <TransactionsContext.Provider
       value={{
-        transactions
+        transactions,
+        createTransaction
       }}
     >
       { children }
